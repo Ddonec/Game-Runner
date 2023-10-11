@@ -17,6 +17,7 @@ let obstacleInterval;
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") {
     if (lost) {
+      clearInterval(obstacleInterval);
       resetGame();
       startGame();
     } else {
@@ -27,17 +28,13 @@ document.addEventListener("keydown", (event) => {
         toggleMovementLeft();
       }
     }
-    if (event.key === " ") {
-      if (!gameStartTime) {
-        startGame();
-        startMovingElements();
-        updateScore();
-      }
-    }
+    // if (!gameStartTime) {
+    //   startGame();
+    //   startMovingElements();
+    //   updateScore();
+    // }
   }
 });
-
-document.addEventListener("keydown", (event) => {});
 
 function toggleJump() {
   if (isJumping) return;
@@ -45,12 +42,14 @@ function toggleJump() {
 }
 
 function toggleMovementLeft() {
-  isMovingLeft = true;
-  startMovingLeft();
+  if (!isMovingLeft) {
+    isMovingLeft = true;
+    createObstacle();
+    startMovingLeft();
+  }
 }
 
 function startMovingLeft() {
-  isMovingLeft = true;
   moveInterval = setInterval(() => {
     currentPosition -= 5;
     if (currentPosition <= -grassWidth) {
@@ -60,9 +59,6 @@ function startMovingLeft() {
     grassSecond.style.left = currentPosition + "px";
     moveObstacles();
   }, 20);
-  if (isMovingLeft) {
-    createObstacle();
-  }
 }
 
 function shouldCreateObstacle() {
@@ -114,6 +110,10 @@ function updatePlayerPosition(height) {
 }
 
 function createObstacle() {
+  if (lost) {
+    return; // Если игра завершена, не создавайте новые препятствия
+  }
+
   const obstacle = document.createElement("div");
   obstacle.classList.add("obstacle");
   obstacle.style.left = "100%";
@@ -121,14 +121,7 @@ function createObstacle() {
   obstacles.push(obstacle);
 
   const randomDelay = Math.floor(Math.random() * 1000) + 800;
-  setTimeout(createObstacle, randomDelay);
-
-  clearInterval(obstacleInterval);
-  obstacleInterval = setInterval(() => {
-    if (!lost) {
-      createObstacle();
-    }
-  }, randomDelay);
+  obstacleInterval = setTimeout(createObstacle, randomDelay);
 }
 
 function updateScore() {
@@ -164,12 +157,17 @@ function resetGame() {
   score = 0;
   updateScore();
   startMovingElements();
+  clearIntervals();
 }
 
 function startGame() {
+  // Останавливаем все интервалы
+  clearIntervals();
+
   gameStartTime = Date.now();
   horse.style.bottom = "0px";
   obstacles = [];
+  clearObstacles();
 }
 
 const leaderboard = document.getElementById("leaderboard");
@@ -242,3 +240,10 @@ function updateLeaderboard() {
 }
 
 startGame();
+
+function clearIntervals() {
+  clearInterval(moveInterval);
+  clearInterval(jumpInterval);
+  clearInterval(obstacleInterval);
+}
+clearIntervals();
