@@ -35,10 +35,9 @@ function toggleMovementLeft() {
 function startMovingLeft() {
   isMovingLeft = true;
   moveInterval = setInterval(() => {
-    currentPosition -= 5; // Двигаем контейнер влево
+    currentPosition -= 5; 
     if (currentPosition <= -grassWidth) {
-      currentPosition = 0; // Если контейнер ушел за пределы экрана, вернем его в начало
-    }
+      currentPosition = 0; 
     grassContainer.style.left = currentPosition + "px";
     grassSecond.style.left = currentPosition + "px";
   }, 20);
