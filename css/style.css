@@ -24,7 +24,7 @@ body {
   position: absolute;
   bottom: 0px;
   background-color: #f0f0f0;
-  background-image: url("/assets/content/grass.png");
+  background-image: url(../assets/content/grass.png);
   background-repeat: repeat-x;
   background-size: 1%;
   background-position: bottom;
@@ -39,7 +39,7 @@ body {
   position: absolute;
   bottom: 0px;
   background-color: #f0f0f0;
-  background-image: url("/assets/content/grass.png");
+  background-image: url(../assets/content/grass.png);
   background-repeat: repeat-x;
   background-size: 1%;
   background-position: bottom;
@@ -60,7 +60,7 @@ body {
   right: 0;
   width: 34px;
   height: 40px;
-  background-image: url("/assets/content/icons8-fence-48.png");
+  background-image: url(../assets/content/icons8-fence-48.png);
   z-index: 2;
 }
 #score-area {
