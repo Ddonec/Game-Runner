@@ -42,12 +42,13 @@ document.addEventListener("keydown", (event) => {
       resetGame();
       startGame();
     } else {
-      if (!isJumping && topValueOfHorse < 5) {
-        toggleJump();
-      }
       if (!isMovingLeft) {
         toggleMovementLeft();
         // clearIntervals();
+      } else {
+        if (!isJumping && topValueOfHorse < 5) {
+          toggleJump();
+        }
       }
     }
   }
@@ -165,20 +166,20 @@ function updateScore() {
   document.getElementById("score-area").textContent = `Score: ${score}`;
 }
 
-// function startMovingElements() {
-//   moveInterval = setInterval(() => {
-//     currentPosition -= 50;
-//     if (currentPosition <= -grassWidth) {
-//       currentPosition = 0;
-//     }
-//     grassContainer.style.left = currentPosition + "px";
-//     grassSecond.style.left = currentPosition + "px";
-//     moveObstacles();
-//   }, 20);
-//   if (isMovingLeft) {
-//     createObstacle();
-//   }
-// }
+function startMovingElements() {
+  moveInterval = setInterval(() => {
+    currentPosition -= 50;
+    if (currentPosition <= -grassWidth) {
+      currentPosition = 0;
+    }
+    grassContainer.style.left = currentPosition + "px";
+    grassSecond.style.left = currentPosition + "px";
+    moveObstacles();
+  }, 20);
+  if (isMovingLeft) {
+    createObstacle();
+  }
+}
 
 function resetGame() {
   clearInterval(moveInterval);
@@ -237,6 +238,7 @@ gameOrGameOver = setInterval(function () {
         `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt="">
         for restart`;
       menuAudio();
+      horse.style.bottom = "0px";
     }
   });
 
@@ -251,7 +253,7 @@ gameOrGameOver = setInterval(function () {
     updateScore();
   }
   topValueOfHorse = topOfHorse;
-//   console.log(score);
+  //   console.log(score);
 }, 100);
 
 function handleResult(score) {
@@ -305,20 +307,19 @@ clearIntervals();
 // }
 // checkState();
 
-
 //Под тачскрин
 document.addEventListener("touchstart", (event) => {
-    if (lost) {
-      gameover.innerHTML = `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt=""> for start to play`;
-      scoreValue.textContent = "Score: 0";
-      resetGame();
-      startGame();
-    } else {
-      if (!isJumping && topValueOfHorse < 5) {
-        toggleJump();
-      }
-      if (!isMovingLeft) {
-        toggleMovementLeft();
-      }
+  if (lost) {
+    gameover.innerHTML = `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt=""> for start to play`;
+    scoreValue.textContent = "Score: 0";
+    resetGame();
+    startGame();
+  } else {
+    if (!isJumping && topValueOfHorse < 5) {
+      toggleJump();
     }
-  });
+    if (!isMovingLeft) {
+      toggleMovementLeft();
+    }
+  }
+});
