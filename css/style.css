@@ -13,10 +13,12 @@ body {
   position: relative;
   background-color: #f0f0f0;
   z-index: 2;
+  display: flex;
+  align-items: center;
 }
 
 #grass-container {
-  width: 1000px;
+  width: 4000px;
   height: 50px;
   margin: 0 auto;
   position: absolute;
@@ -24,14 +26,14 @@ body {
   background-color: #f0f0f0;
   background-image: url("/assets/content/grass.png");
   background-repeat: repeat-x;
-  background-size: 5%;
+  background-size: 1%;
   background-position: bottom;
   z-index: 1;
   transform: translateX(-10px);
 }
 
 #second-grass {
-  width: 1000px;
+  width: 4000px;
   height: 50px;
   margin: 0 auto;
   position: absolute;
@@ -39,16 +41,15 @@ body {
   background-color: #f0f0f0;
   background-image: url("/assets/content/grass.png");
   background-repeat: repeat-x;
-  background-size: 5%;
+  background-size: 1%;
   background-position: bottom;
   z-index: 1;
-  transform: translateX(990px);
+  transform: translateX(3990px);
 }
 
 #horse {
   position: absolute;
   left: 50px;
-  bottom: 5px;
   transition: 0.3s;
   z-index: 2;
 }
@@ -58,21 +59,45 @@ body {
   bottom: 0;
   right: 0;
   width: 34px;
-  height: 40px; 
+  height: 40px;
   background-image: url(/assets/content/icons8-fence-48.png);
   z-index: 2;
 }
-#score-area{
-    width: 20%;
-    height: 20px;
-    padding-left: 15px;
+#score-area {
+  position: absolute;
+  width: 20%;
+  height: 20px;
+  padding-left: 15px;
+  top: 10px;
+}
+#leaderboard {
+  width: 20%;
+  height: 200px;
+  position: absolute;
+  right: 0;
+  text-align: right;
+  padding: 0 15px;
+  top: 10px;
+}
 
+#gameover { 
+  margin: 0 auto;
+  text-align: center;
+  line-height: 30px;
 }
-#leaderboard{
-    width: 20%;
-    height: 200px;
-    position: absolute;
-    right: 0;
-    text-align: right;
-    padding: 0 15px;
+
+
+#spaceimg{
+  height: 25px;
+  margin: 0 5px;
+margin-bottom: 0;
 }
+
+.horse{
+  height: 50px;
+}
+
+.none{
+  display: none;
+}
+

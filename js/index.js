@@ -1,40 +1,68 @@
 const horse = document.getElementById("horse");
 const grassContainer = document.getElementById("grass-container");
 const grassSecond = document.getElementById("second-grass");
+const leaderboard = document.getElementById("leaderboard");
+const scoreValue = document.getElementById("score-area");
+const gameover = document.getElementById("gameover");
+const audioHorse = document.getElementById("ahorse");
+const audioMenu = document.getElementById("amenu");
+const audioFail = document.getElementById("afail");
+const horseImage = document.getElementById("horseimage");
+
+let topValueOfHorse = 5;
 let isJumping = false;
 let isMovingLeft = false;
 let jumpInterval;
 let moveInterval;
-const grassWidth = 1000;
+const grassWidth = 4000;
 let currentPosition = 0;
 let obstacles = [];
 let gameStartTime = 0;
 let score = 0;
-let arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let arr = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 let lost = false;
 let obstacleInterval;
+let randonLevelUpdate = 800;
+
+function menuAudio() {
+  audioMenu.play();
+}
+menuAudio();
+
+audioMenu.addEventListener("ended", function () {
+  audioMenu.currentTime = 0;
+  audioMenu.play();
+});
 
 document.addEventListener("keydown", (event) => {
   if (event.key === " ") {
     if (lost) {
-      clearInterval(obstacleInterval);
+      gameover.innerHTML = `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt=""> for start to play`;
+      scoreValue.textContent = "Score: 0";
       resetGame();
       startGame();
     } else {
-      if (!isJumping) {
+      if (!isJumping && topValueOfHorse < 5) {
         toggleJump();
       }
       if (!isMovingLeft) {
         toggleMovementLeft();
+        // clearIntervals();
       }
     }
-    // if (!gameStartTime) {
-    //   startGame();
-    //   startMovingElements();
-    //   updateScore();
-    // }
   }
 });
+function playMusic() {
+  audioHorse.play();
+}
+
+function stopMusic() {
+  audioHorse.pause();
+  audioHorse.currentTime = 0;
+}
+function pauseMusicMenu() {
+  audioMenu.pause();
+}
 
 function toggleJump() {
   if (isJumping) return;
@@ -43,9 +71,14 @@ function toggleJump() {
 
 function toggleMovementLeft() {
   if (!isMovingLeft) {
+    gameover.classList.add("none");
+    gameStartTime = Date.now();
     isMovingLeft = true;
     createObstacle();
     startMovingLeft();
+    playMusic();
+    pauseMusicMenu();
+    horseImage.src = "assets/content/horse-runner.gif";
   }
 }
 
@@ -69,7 +102,7 @@ function shouldCreateObstacle() {
 function moveObstacles() {
   obstacles.forEach((obstacle, index) => {
     const obstaclePosition = parseInt(getComputedStyle(obstacle).left);
-    obstacle.style.left = obstaclePosition - 5 + "px";
+    obstacle.style.left = obstaclePosition - 5 + "px"; // скорость препятствий
     if (obstaclePosition <= -50) {
       obstacles.splice(index, 1);
       obstacle.remove();
@@ -81,11 +114,11 @@ function jump() {
   let jumpHeight = 0;
   isJumping = true;
   jumpInterval = setInterval(() => {
-    if (jumpHeight >= 300) {
+    if (jumpHeight >= 200) {
       clearInterval(jumpInterval);
       fall();
     } else {
-      jumpHeight += 20;
+      jumpHeight += 10;
       updatePlayerPosition(jumpHeight);
     }
   }, 10);
@@ -102,7 +135,7 @@ function fall() {
       fallHeight -= 5;
       updatePlayerPosition(fallHeight);
     }
-  }, 20);
+  }, 15);
 }
 
 function updatePlayerPosition(height) {
@@ -111,7 +144,7 @@ function updatePlayerPosition(height) {
 
 function createObstacle() {
   if (lost) {
-    return; // Если игра завершена, не создавайте новые препятствия
+    return;
   }
 
   const obstacle = document.createElement("div");
@@ -120,7 +153,9 @@ function createObstacle() {
   document.getElementById("game-container").appendChild(obstacle);
   obstacles.push(obstacle);
 
-  const randomDelay = Math.floor(Math.random() * 1000) + 800;
+  const randomDelay = Math.floor(
+    Math.random() * 1000 + randonLevelUpdate - score / 3
+  );
   obstacleInterval = setTimeout(createObstacle, randomDelay);
 }
 
@@ -130,20 +165,20 @@ function updateScore() {
   document.getElementById("score-area").textContent = `Score: ${score}`;
 }
 
-function startMovingElements() {
-  moveInterval = setInterval(() => {
-    currentPosition -= 5;
-    if (currentPosition <= -grassWidth) {
-      currentPosition = 0;
-    }
-    grassContainer.style.left = currentPosition + "px";
-    grassSecond.style.left = currentPosition + "px";
-    moveObstacles();
-  }, 20);
-  if (isMovingLeft) {
-    createObstacle();
-  }
-}
+// function startMovingElements() {
+//   moveInterval = setInterval(() => {
+//     currentPosition -= 50;
+//     if (currentPosition <= -grassWidth) {
+//       currentPosition = 0;
+//     }
+//     grassContainer.style.left = currentPosition + "px";
+//     grassSecond.style.left = currentPosition + "px";
+//     moveObstacles();
+//   }, 20);
+//   if (isMovingLeft) {
+//     createObstacle();
+//   }
+// }
 
 function resetGame() {
   clearInterval(moveInterval);
@@ -155,22 +190,16 @@ function resetGame() {
   currentPosition = 0;
   lost = false;
   score = 0;
-  updateScore();
   startMovingElements();
   clearIntervals();
 }
 
 function startGame() {
-  // Останавливаем все интервалы
   clearIntervals();
-
   gameStartTime = Date.now();
   horse.style.bottom = "0px";
   obstacles = [];
-  clearObstacles();
 }
-
-const leaderboard = document.getElementById("leaderboard");
 
 arr.reverse();
 leaderboard.textContent = "Top result:";
@@ -181,10 +210,13 @@ for (let i = 0; i < arr.length; i++) {
   leaderboard.appendChild(item);
 }
 
-let gameOrGameOver = setInterval(function () {
+let gameOrGameOver;
+
+gameOrGameOver = setInterval(function () {
   let topOfHorse = parseInt(
     window.getComputedStyle(horse).getPropertyValue("bottom")
   );
+
   let fences = document.querySelectorAll(".obstacle");
 
   fences.forEach((fence) => {
@@ -195,18 +227,31 @@ let gameOrGameOver = setInterval(function () {
     if (topOfHorse < 20 && leftOfFence < 90 && leftOfFence > 50) {
       lost = true;
       isMovingLeft = false;
+      isJumping = false;
+      horseImage.src = "assets/content/horse-stay.png";
+      gameover.classList.remove("none");
+      gameover.innerHTML =
+        "Game over,&nbsp your " +
+        scoreValue.textContent +
+        "<br />" +
+        `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt="">
+        for restart`;
+      menuAudio();
     }
   });
 
   if (lost) {
     clearInterval(moveInterval);
     clearInterval(jumpInterval);
-    console.log(`lose, Score: ${score}`);
+    // console.log(`lose, Score: ${score}`);
     handleResult(score);
+    stopMusic();
   }
   if (isMovingLeft) {
     updateScore();
   }
+  topValueOfHorse = topOfHorse;
+//   console.log(score);
 }, 100);
 
 function handleResult(score) {
@@ -247,3 +292,33 @@ function clearIntervals() {
   clearInterval(obstacleInterval);
 }
 clearIntervals();
+
+// function checkState() {
+//   if (isJumping) {
+//   }
+//   if (!isMovingLeft) {
+//     console.log("nomov    ");
+//   }
+//   if (isMovingLeft === true) {
+//     console.log("mov");
+//   }
+// }
+// checkState();
+
+
+//Под тачскрин
+document.addEventListener("touchstart", (event) => {
+    if (lost) {
+      gameover.innerHTML = `Press 'Spase' <img id="spaceimg" src="assets/content/icons8-клавиша-пробел-50.png" alt=""> for start to play`;
+      scoreValue.textContent = "Score: 0";
+      resetGame();
+      startGame();
+    } else {
+      if (!isJumping && topValueOfHorse < 5) {
+        toggleJump();
+      }
+      if (!isMovingLeft) {
+        toggleMovementLeft();
+      }
+    }
+  });

@@ -7,17 +7,39 @@
     <title>Runner Game</title>
   </head>
   <body>
+    <audio id="ahorse" src="assets/content/AMAZING_HORSE.mp3"></audio>
+    <audio
+      id="amenu"
+      src="assets/content/PlayStation-5-System-Music.mp3"
+    ></audio>
+    <audio id="afail" src="assets/content/92d9255b6063afc.mp3"></audio>
     <div id="game-container">
       <div id="horse">
-        <img src="assets/content/icons8-trotting-horse-48.png" alt="" />
+        <img
+          class="horse"
+          id="horseimage"
+          src="assets/content/horse-stay.png"
+          alt=""
+        />
       </div>
       <div id="grass-container"></div>
-      <div id="leaderboard"> Top score:
-        <br>1: 543 <br> 2: 455 <br>3: 423
+      <div id="leaderboard">
+        Top score: <br />1: 543 <br />
+        2: 455 <br />3: 423
       </div>
-      <div id="score-area"> Score: 0</div>
+      <div id="score-area">Score: 0</div>
       <div id="second-grass"></div>
-
+      <div id="gameover" class="">
+        Press 'Spase' for start to play
+        <br />
+        Press 'Spase'
+        <img
+          id="spaceimg"
+          src="assets/content/icons8-клавиша-пробел-50.png"
+          alt=""
+        />
+        for jump*
+      </div>
     </div>
     <script src="js/index.js"></script>
   </body>
