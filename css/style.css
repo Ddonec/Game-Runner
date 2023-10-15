@@ -99,3 +99,40 @@ body {
 .none {
   display: none;
 }
+
+footer {
+  display: flex;
+  justify-content: space-around;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background: rgba(105, 104, 104, 1);
+  padding: 10px 0;
+  color: aliceblue;
+}
+.icon-f {
+  height: 20px;
+  line-height: 20px;
+  font-size: 20px;
+}
+.social {
+  display: flex;
+  gap: 30px;
+}
+.rsschooldiv {
+  width: 120px;
+}
+.cop {
+  font-size: 10px;
+}
+.icon-f {
+  color: black;
+}
+.pointer {
+  cursor: pointer;
+}
+
+.hover:hover {
+  scale: 1.2;
+  transition: 0.5s;
+}
